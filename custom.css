@@ -1,28 +1,28 @@
-.monaco-editor .squiggly-warning,
-.monaco-editor .squiggly-error,
-.monaco-editor .squiggly-info,
-.monaco-editor .squiggly-hint {
+.squiggly-warning,
+.squiggly-error,
+.squiggly-info,
+.squiggly-hint {
     border-bottom-width: 4px;
     border-bottom-style: solid;
     box-sizing: border-box !important;
 }
 
-.monaco-editor .squiggly-warning  {
+.squiggly-warning  {
     background: #ffc00030;
     border-bottom-color: #ffc000;
 }
 
-.monaco-editor .squiggly-error {
+.squiggly-error {
     background: #ff000030;
     border-bottom-color: #ff0000;
 }
 
-.monaco-editor .squiggly-info {
+.squiggly-info {
     background: #0e7fff30;
     border-bottom-color: #0e7fff;
 }
 
-.monaco-editor .squiggly-hint {
+.squiggly-hint {
     background: #a2eeef30;
     border-bottom-color: #a2eeef;
 }
