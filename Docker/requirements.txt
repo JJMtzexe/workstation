@@ -1,0 +1,16 @@
+yfinance
+pandas
+datetime
+random
+matplotlib
+numpy
+bokeh
+beautifulsoup4
+tensorflow
+sqlalchemy
+pymysql
+seaborn
+requests
+scikit-learn
+Pillow
+typing
