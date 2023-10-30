@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "arduino\\test\\app.ino",
-    "port": "COM1"
+    "sketch": "Arduino Projects/RGBCI Strip Music Controllers/test.ino",
+    "port": "/dev/tty.usbmodem11401"
 }

@@ -9,7 +9,7 @@ int SENSOR = A0; // Analog sensor input pin
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
 // Maximum luminosity value
-const byte MAXLUMINOSITY = 50;
+const byte MAXLUMINOSITY = 255;
 
 // Function to convert RGB values to a 32-bit hexadecimal color
 uint32_t RGBtoHex(uint8_t r, uint8_t g, uint8_t b) { return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b; }
@@ -57,27 +57,40 @@ void calibrateSensor()
     delay(500);
 }
 
-// Function to convert rainbow color based on a static position
-uint32_t rainbowColor()
+// Function to generate a rainbow color
+uint32_t Wheel(byte WheelPos)
 {
-    static int pos = 0; // Static variable to keep track of position
-    pos = (pos + 1) % 256; // Increment position (0 to 255)
+    WheelPos = 255 - WheelPos;
+    if (WheelPos < 85) {
+        return pixels.Color((255 - WheelPos * 3) * MAXLUMINOSITY / 255, 0, (WheelPos * 3) * MAXLUMINOSITY / 255);
+    } else if (WheelPos < 170) {
+        WheelPos -= 85;
+        return pixels.Color(0, (WheelPos * 3) * MAXLUMINOSITY / 255, (255 - WheelPos * 3) * MAXLUMINOSITY / 255);
+    } else {
+        WheelPos -= 170;
+        return pixels.Color((WheelPos * 3) * MAXLUMINOSITY / 255, (255 - WheelPos * 3) * MAXLUMINOSITY / 255, 0);
+    }
+}
 
-    // Calculate RGB values based on the rainbow position
-    int r = map(pos, 0, 255, MAXLUMINOSITY, 0);
-    int g = map(pos, 0, 255, 0, MAXLUMINOSITY);
-    int b = map(pos, 0, 255, MAXLUMINOSITY, 0);
+// Function to set the color of a pixel based on the rainbow
+void rainbow(int unsigned delay_val = 10, int unsigned step = 1)
+{
+    static int pos = 0;
 
-    // Pack the RGB values into a 32-bit color value
-    uint32_t color = ((uint32_t)r << 16) | ((uint32_t)g << 8) | (uint32_t)b;
+    for (int i = 0; i < pixels.numPixels(); i++) {
+        pixels.setPixelColor(i, Wheel((i + pos) & 255));
+    }
 
-    return color;
+    pixels.show();
+
+    pos = (pos + step) % 256; // Increment position (0 to 255)
+    delay(delay_val); // Adjust the delay to control the speed of the rainbow
 }
 
 // Function to fade between two colors on NeoPixel strip
 void fade(int r1, int g1, int b1, int r2, int g2, int b2, int step = 1)
 {
-    pixels.fill(0x000000);
+    pixels.fill(0);
 
     for (int i = 0; i <= MAXLUMINOSITY; i++) {
         int r = (r1 * (MAXLUMINOSITY - i) + r2 * i) / MAXLUMINOSITY;
@@ -113,8 +126,8 @@ void fillArray(int r, int g, int b, int delay_val = 10, bool random_node = false
 void setup()
 {
     pinMode(SENSOR, INPUT);
-    pinMode(12, OUTPUT);
-    digitalWrite(12, HIGH);
+    pinMode(2, OUTPUT);
+    digitalWrite(2, HIGH);
     pixels.begin();
     pixels.fill(0);
     pixels.show();
@@ -131,9 +144,8 @@ void loop()
     int read = analogRead(SENSOR);
 
     // If the sensor value is above the calibrated threshold, execute
-    if (read > calibrated_param + 7) {
-        pixels.fill(RGBtoHex(MAXLUMINOSITY, 0, 0));
-        pixels.show();
+    if (read > calibrated_param + 13) {
+        rainbow(0, 15);
     } else {
         // If below the threshold, turn off the NeoPixel strip
         pixels.fill(0);

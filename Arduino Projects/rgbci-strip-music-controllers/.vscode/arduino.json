@@ -1,5 +1,5 @@
 {
     "port": "/dev/tty.usbmodem1401",
     "board": "arduino:avr:uno",
-    "sketch": "test.ino"
+    "sketch": "rgbci-strip-music-controllers.ino"
 }
